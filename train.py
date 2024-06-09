@@ -24,7 +24,7 @@ def train_step(model, criterion, optimizer, dataloader, epoch, total_epochs, dev
         t.set_description(f"Epoch {epoch+1}/{total_epochs}")
 
         for i, data in enumerate(t, 0):
-            inputs, labels, w = data[0].to(device), data[1].to(device),  data[2].to(device)
+            inputs, labels, w = data[0].to(device), data[1].to(device), data[2].to(device)
             optimizer.zero_grad()  #
 
             outputs = model(inputs)
@@ -46,7 +46,9 @@ def train_step(model, criterion, optimizer, dataloader, epoch, total_epochs, dev
 
 def train(model, train_dataset, test_dataset, weights, batch_size, device, total_epochs, test_interval = 5, learning_rate = 0.1, momentum = 0.9, weight_decay = 5e-4):
     
-    weighted_dataset = CustomWeightedDataset(train_dataset, weights)
+    model.to(device)
+    
+    weighted_dataset = CustomWeightedDataset(train_dataset, weights, device)
     train_loader = DataLoader(weighted_dataset, batch_size=batch_size, shuffle=True, num_workers=4)
 
 

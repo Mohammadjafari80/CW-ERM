@@ -17,10 +17,22 @@ class WeightedCrossEntropyLoss(nn.Module):
     def __init__(self):
         super(WeightedCrossEntropyLoss, self).__init__()
 
-    def forward(self, outputs, labels, weights):
+    def forward(self, outputs: torch.Tensor, labels: torch.Tensor, weights: torch.Tensor) -> torch.Tensor:
+        # Compute the cross-entropy loss with no reduction
         loss = F.cross_entropy(outputs, labels, reduction='none')
+        
+        # Ensure the weights are broadcastable to the loss tensor
+        weights = weights.expand_as(loss)
+        
+        # Compute the weighted loss
         weighted_loss = torch.mean(loss * weights)
+        
+        # Handle potential NaN or inf values in the weighted loss
+        if torch.isnan(weighted_loss) or torch.isinf(weighted_loss):
+            weighted_loss = torch.tensor(0.0, device=outputs.device)
+        
         return weighted_loss
+
     
 def get_model(arch, num_classes):
     

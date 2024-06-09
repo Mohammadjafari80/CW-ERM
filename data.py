@@ -37,16 +37,25 @@ SIZE = {
 class CustomWeightedDataset(Dataset):
     """Class for datasets with weight for each sample"""
     
-    def __init__(self, dataset, weights):
+    def __init__(self, dataset, weights, device='cpu'):
         self.dataset = dataset
         self.weights = weights
+        self.device = device  # Add device attribute
 
     def __len__(self):
         return len(self.dataset)
 
     def __getitem__(self, idx):
         data, label = self.dataset[idx]
+        
+        data = data.to(self.device)
+        if not isinstance(label, torch.Tensor):
+            label = torch.tensor(label, device=self.device)
+        else:
+            label = label.to(self.device)
+
         weight = self.weights[idx]
+        
         return data, label, weight
 
     

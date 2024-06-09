@@ -17,6 +17,6 @@ def evalualte(model, dataloader, epoch, total_epochs, device):
                 correct += (predicted == labels).sum().item()
 
     accuracy = correct / total
-    print(f"Epoch {epoch+1}, Test Set Accuracy: {accuracy:.2f}%")
+    print(f"Epoch {epoch+1}, Test Set Accuracy: {accuracy:.4f}%")
     
     return accuracy
