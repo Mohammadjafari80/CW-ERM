@@ -83,7 +83,7 @@ def parse_args():
     )
     
     parser.add_argument(
-        "--data-dir", type=str, default="./data", help="path to datasets"
+        "--data-dir", type=str, default="./data", help="path to dataset"
     )
     
     parser.add_argument(
